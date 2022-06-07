@@ -11,13 +11,20 @@ script = ExtResource( 1 )
 wait_time = 15.0
 autostart = true
 
-[node name="DependenciesContainer" type="Container" parent="."]
+[node name="DependencyContainer" type="Control" parent="."]
 margin_right = 40.0
 margin_bottom = 40.0
 
-[node name="Label" type="Label" parent="DependenciesContainer"]
-margin_right = 40.0
+[node name="Label" type="Label" parent="DependencyContainer"]
+margin_right = 96.0
 margin_bottom = 14.0
 text = "Dependencies:"
+
+[node name="Dependencies" type="VBoxContainer" parent="DependencyContainer"]
+margin_left = 112.0
+margin_top = 4.0
+margin_right = 146.0
+margin_bottom = 39.0
+custom_constants/separation = 35
 
 [connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

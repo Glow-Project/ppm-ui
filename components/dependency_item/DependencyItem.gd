@@ -1,3 +1,4 @@
+tool
 extends Control
 
 signal delete_pressed(dependency)
