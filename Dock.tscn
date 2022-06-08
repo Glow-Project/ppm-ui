@@ -11,16 +11,53 @@ script = ExtResource( 1 )
 wait_time = 15.0
 autostart = true
 
-[node name="DependencyContainer" type="Control" parent="."]
+[node name="InitContainer" type="CenterContainer" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -17.0
+margin_right = 17.0
+
+[node name="Init" type="Button" parent="InitContainer"]
+margin_top = 290.0
+margin_right = 34.0
+margin_bottom = 310.0
+text = "Init"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 margin_right = 40.0
 margin_bottom = 40.0
+custom_constants/separation = 30
 
-[node name="Label" type="Label" parent="DependencyContainer"]
+[node name="PluginTypeContainer" type="Control" parent="VBoxContainer"]
+margin_right = 40.0
+
+[node name="Label" type="Label" parent="VBoxContainer/PluginTypeContainer"]
+margin_top = 1.0
+margin_right = 101.0
+margin_bottom = 15.0
+text = "This Project is a"
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/PluginTypeContainer"]
+margin_left = 116.0
+margin_top = 1.0
+margin_right = 240.0
+margin_bottom = 21.0
+text = "Game"
+items = [ "Game", null, false, 0, null, "Plugin", null, false, 1, null ]
+selected = 0
+
+[node name="DependencyContainer" type="Control" parent="VBoxContainer"]
+margin_top = 30.0
+margin_right = 40.0
+margin_bottom = 30.0
+
+[node name="Label" type="Label" parent="VBoxContainer/DependencyContainer"]
 margin_right = 96.0
 margin_bottom = 14.0
 text = "Dependencies:"
 
-[node name="Dependencies" type="VBoxContainer" parent="DependencyContainer"]
+[node name="Dependencies" type="VBoxContainer" parent="VBoxContainer/DependencyContainer"]
 margin_left = 112.0
 margin_top = 4.0
 margin_right = 146.0
@@ -28,3 +65,5 @@ margin_bottom = 39.0
 custom_constants/separation = 35
 
 [connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
+[connection signal="pressed" from="InitContainer/Init" to="." method="_on_Init_pressed"]
+[connection signal="item_selected" from="VBoxContainer/PluginTypeContainer/OptionButton" to="." method="_on_OptionButton_item_selected"]

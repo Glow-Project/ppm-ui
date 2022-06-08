@@ -4,9 +4,21 @@ extends Control
 var dependency_item_scene = preload("res://addons/ppm-ui/components/dependency_item/DependencyItem.tscn")
 
 var config_path = "res://ppm.json"
-var file_content: Dictionary
+var config: Dictionary
+
+var plugin_type_container: Control
+var dependency_container: Control
+var plugin_type_dropdown: OptionButton
 
 func _ready():
+	plugin_type_container = $VBoxContainer/PluginTypeContainer
+	dependency_container = $VBoxContainer/DependencyContainer
+	plugin_type_dropdown = plugin_type_container.get_node("OptionButton")
+
+	if not len(plugin_type_dropdown.items):
+		plugin_type_dropdown.add_item("Game")
+		plugin_type_dropdown.add_item("Plugin")
+
 	refresh()
 
 func fetch_from_file():
@@ -20,17 +32,32 @@ func fetch_from_file():
 	file.close()
 	return content
 
+func write_to_file(content: Dictionary = config):
+	var file = File.new()
+	file.open(config_path, file.WRITE)
+	file.store_string(to_json(content))
+	file.close()
+
 func refresh():
-	file_content = fetch_from_file()
-	if file_content != null:
+	config = fetch_from_file()
+	if config != null:
+		$VBoxContainer.show()
+		$InitContainer.hide()
 		update_ui()
+	else:
+		$InitContainer.show()
+		$VBoxContainer.hide()
 
 func clear_children(node: Node):
 	for child in node.get_children():
 		node.remove_child(child)
 
-func update_ui(content: Dictionary = file_content):
-	var deps = $DependencyContainer/Dependencies
+func update_ui(content: Dictionary = config):
+	# ===[ Plugin type ]===
+	plugin_type_dropdown.select(1 if content["plugin"] else 0)
+
+	# ===[ Dependency list ]===
+	var deps = dependency_container.get_node("Dependencies")
 	clear_children(deps)
 
 	for dep in content["dependencies"]:
@@ -43,6 +70,16 @@ func _on_Timer_timeout():
 	refresh()
 
 func _on_DependencyItem_delete_pressed(dependency):
-	print("HERE")
 	OS.execute("ppm", ["uninstall", dependency.dependency_name])
+	refresh()
+
+
+func _on_OptionButton_item_selected(index: int):
+	config["plugin"] = index == 1
+	write_to_file()
+	update_ui()
+
+
+func _on_Init_pressed():
+	OS.execute("ppm", ["init"])
 	refresh()
