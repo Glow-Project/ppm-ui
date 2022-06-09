@@ -39,8 +39,9 @@ func write_to_file(content: Dictionary = config):
 	file.close()
 
 func refresh():
-	config = fetch_from_file()
-	if config != null:
+	var fetched_content = fetch_from_file()
+	if fetched_content != null:
+		config = fetched_content
 		$VBoxContainer.show()
 		$InitContainer.hide()
 		update_ui()
@@ -66,6 +67,7 @@ func update_ui(content: Dictionary = config):
 		dep_item.connect("delete_pressed", self, "_on_DependencyItem_delete_pressed")
 		deps.add_child(dep_item)		
 
+
 func _on_Timer_timeout():
 	refresh()
 
@@ -73,12 +75,10 @@ func _on_DependencyItem_delete_pressed(dependency):
 	OS.execute("ppm", ["uninstall", dependency.dependency_name])
 	refresh()
 
-
 func _on_OptionButton_item_selected(index: int):
 	config["plugin"] = index == 1
 	write_to_file()
 	update_ui()
-
 
 func _on_Init_pressed():
 	OS.execute("ppm", ["init"])
