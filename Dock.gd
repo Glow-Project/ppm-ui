@@ -63,10 +63,7 @@ func update_ui(content: Dictionary = config):
 
 	for dep in content["dependencies"]:
 		var dep_item = dependency_item_scene.instance()
-		if dep_item is String:
-			dep_item.dependency_name = dep_item
-		else:
-			dep_item.dependency_name = dep["identifier"]
+		dep_item.dependency_name = dep["identifier"]
 		dep_item.connect("delete_pressed", self, "_on_DependencyItem_delete_pressed")
 		deps.add_child(dep_item)		
 
