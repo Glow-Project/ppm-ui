@@ -63,7 +63,10 @@ func update_ui(content: Dictionary = config):
 
 	for dep in content["dependencies"]:
 		var dep_item = dependency_item_scene.instance()
-		dep_item.dependency_name = dep
+		if dep_item is String:
+			dep_item.dependency_name = dep_item
+		else:
+			dep_item.dependency_name = dep["identifier"]
 		dep_item.connect("delete_pressed", self, "_on_DependencyItem_delete_pressed")
 		deps.add_child(dep_item)		
 
@@ -72,7 +75,7 @@ func _on_Timer_timeout():
 	refresh()
 
 func _on_DependencyItem_delete_pressed(dependency):
-	OS.execute("ppm", ["uninstall", dependency.dependency_name])
+	var _unused = OS.execute("ppm", ["uninstall", dependency.dependency_name])
 	refresh()
 
 func _on_OptionButton_item_selected(index: int):
@@ -81,5 +84,5 @@ func _on_OptionButton_item_selected(index: int):
 	update_ui()
 
 func _on_Init_pressed():
-	OS.execute("ppm", ["init"])
+	var _unused = OS.execute("ppm", ["init"])
 	refresh()
