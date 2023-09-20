@@ -1,4 +1,4 @@
-tool
+@tool
 extends EditorPlugin
 
 # the dock instance
@@ -6,7 +6,7 @@ var dock
 
 func _enter_tree():
 	# load the dock
-	dock = preload("res://addons/ppm-ui/Dock.tscn").instance()
+	dock = preload("./Dock.tscn").instantiate()
 
 	# change the displayed dock name
 	dock.name = "ppm"

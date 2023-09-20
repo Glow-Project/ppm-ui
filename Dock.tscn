@@ -1,69 +1,67 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://dmrf65xuan7rh"]
 
-[ext_resource path="res://addons/ppm-ui/Dock.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://addons/ppm-ui/Dock.gd" id="1"]
 
 [node name="Dock" type="Control"]
+layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-script = ExtResource( 1 )
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 15.0
 autostart = true
 
 [node name="InitContainer" type="CenterContainer" parent="."]
+visible = false
+layout_mode = 0
 anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
-margin_left = -17.0
-margin_right = 17.0
 
 [node name="Init" type="Button" parent="InitContainer"]
-margin_top = 290.0
-margin_right = 34.0
-margin_bottom = 310.0
+layout_mode = 2
 text = "Init"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-margin_right = 40.0
-margin_bottom = 40.0
-custom_constants/separation = 30
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="PluginTypeContainer" type="Control" parent="VBoxContainer"]
-margin_right = 40.0
+[node name="PpmType" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/PluginTypeContainer"]
-margin_top = 1.0
-margin_right = 101.0
-margin_bottom = 15.0
-text = "This Project is a"
+[node name="Label" type="Label" parent="VBoxContainer/PpmType"]
+layout_mode = 2
+text = "This is a "
 
-[node name="OptionButton" type="OptionButton" parent="VBoxContainer/PluginTypeContainer"]
-margin_left = 116.0
-margin_top = 1.0
-margin_right = 240.0
-margin_bottom = 21.0
-text = "Game"
-items = [ "Game", null, false, 0, null, "Plugin", null, false, 1, null ]
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/PpmType"]
+unique_name_in_owner = true
+layout_mode = 2
+item_count = 2
 selected = 0
+popup/item_0/text = "Game"
+popup/item_0/id = 0
+popup/item_1/text = "Plugin"
+popup/item_1/id = 1
 
-[node name="DependencyContainer" type="Control" parent="VBoxContainer"]
-margin_top = 30.0
-margin_right = 40.0
-margin_bottom = 30.0
+[node name="VBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/DependencyContainer"]
-margin_right = 96.0
-margin_bottom = 14.0
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer"]
+layout_mode = 2
 text = "Dependencies:"
 
-[node name="Dependencies" type="VBoxContainer" parent="VBoxContainer/DependencyContainer"]
-margin_left = 112.0
-margin_top = 4.0
-margin_right = 146.0
-margin_bottom = 39.0
-custom_constants/separation = 35
+[node name="Dependencies" type="VBoxContainer" parent="VBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
 
 [connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
 [connection signal="pressed" from="InitContainer/Init" to="." method="_on_Init_pressed"]
-[connection signal="item_selected" from="VBoxContainer/PluginTypeContainer/OptionButton" to="." method="_on_OptionButton_item_selected"]
+[connection signal="item_selected" from="VBoxContainer/PpmType/OptionButton" to="." method="_on_OptionButton_item_selected"]
