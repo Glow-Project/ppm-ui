@@ -60,8 +60,19 @@ func _on_Timer_timeout():
 	refresh()
 
 func _on_DependencyItem_delete_pressed(dependency):
-	var _unused = OS.execute("ppm", ["uninstall", dependency.dependency_name])
-	refresh()
+	var conf: ConfirmationDialog = %ConfirmationDialog
+	var orig_txt = conf.dialog_text
+	conf.dialog_text = orig_txt % dependency.dependency_name
+	conf.popup_centered()
+	
+	conf.confirmed.connect(func():
+		var _unused = OS.execute("ppm", ["uninstall", dependency.dependency_name])
+		refresh()
+	)
+	conf.visibility_changed.connect(func(): 
+		if not conf.visible:
+			conf.dialog_text = orig_txt
+	)
 
 func _on_OptionButton_item_selected(index: int):
 	config["plugin"] = index == 1
